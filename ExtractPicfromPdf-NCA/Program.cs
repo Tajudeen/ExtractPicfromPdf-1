@@ -9,15 +9,14 @@ using UglyToad.PdfPig.XObjects;
 using static System.Net.Mime.MediaTypeNames;
 using static UglyToad.PdfPig.Core.PdfSubpath;
 
-string pdfFilePath = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\target\\2024-stu\\pictures\\test.pdf";
+string pdfFilePath =    $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\target\\2024-stu\\pictures\\test.pdf";
 string targetFolderPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\target\\2024-stu\\pictures";
 string targetFolderPath1 = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\target\\2024-stu\\pictures\\student.csv";
 string targetFolderPath2 = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\target\\2024-stu\\pictures\\OmittedPages.csv";
 string targetFolderPath3 = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\target\\2024-stu\\pictures\\Name.csv";
 
-
-
-string targetFolderPath4 = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\2024-stu\\entences.csv";
+//  rename the file name for proper recognation
+string targetFolderPath4 = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\2024-stu\\Name-Extrated-from-pdf.csv";
 string txtFilePath1 = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\2024-stu\\SPECIAL STUDENT LIST.csv";
 
 
@@ -51,7 +50,7 @@ try
      
         var imag = "";
         var img = 0;
-        // int imageCount = 50715;
+        // int imageCount = 50715
         foreach (Page page in pdfDocument.GetPages())
         {
             var text = ContentOrderTextExtractor.GetText(page, true);
