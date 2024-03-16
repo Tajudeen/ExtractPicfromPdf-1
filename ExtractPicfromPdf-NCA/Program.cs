@@ -1,27 +1,19 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System;
-using System.IO;
-using System.Collections.Immutable;
 using UglyToad.PdfPig;
 using UglyToad.PdfPig.Content;
 using UglyToad.PdfPig.DocumentLayoutAnalysis.TextExtractor;
 using UglyToad.PdfPig.XObjects;
-using static System.Net.Mime.MediaTypeNames;
-using static UglyToad.PdfPig.Core.PdfSubpath;
 
-// string pdfFilePath =    $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\target\\2024-stu\\pictures\\test.pdf";
-// string targetFolderPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\target\\2024-stu\\pictures";
-// string targetFolderPath1 = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\target\\2024-stu\\pictures\\student.csv";
-// string targetFolderPath2 = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\target\\2024-stu\\pictures\\OmittedPages.csv";
-// string targetFolderPath3 = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\target\\2024-stu\\pictures\\Name.csv";
+
+
 
 //Avoid repetitive folder path
-var targetFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),"target","2024-stu","pictures");
-var  pdfFilePath = Path.Combine(targetFolderPath,"test.pdf");
-var targetFolderPath1 = Path.Combine(targetFolderPath,"students.csv");
-var targetFolderPath2 = Path.Combine(targetFolderPath,"OmittedPages.csv");
-var targetFolderPath3 = Path.Combine(targetFolderPath,"Name.csv");
+var targetFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "target", "2024-stu", "pictures");
+var pdfFilePath = Path.Combine(targetFolderPath, "test.pdf");
+var targetFolderPath1 = Path.Combine(targetFolderPath, "students.csv");
+var targetFolderPath2 = Path.Combine(targetFolderPath, "OmittedPages.csv");
+var targetFolderPath3 = Path.Combine(targetFolderPath, "Name.csv");
 
 
 
@@ -44,7 +36,6 @@ string txtFilePath1 = $"{Environment.GetFolderPath(Environment.SpecialFolder.Des
 //        //Console.WriteLine(string.Join(",", sentence));
 //        File.WriteAllLines(targetFolderPath4, newsentence);
 //    }
-  
 
 //}
 
@@ -66,20 +57,20 @@ try
             var text = ContentOrderTextExtractor.GetText(page, true);
             int num = text.IndexOf("Student Image");
             var small = text.Remove(0, num);
-               var textses = small.Replace("Student Image", " ").Replace("\r\n", ",").Trim().Split(',').ToList();
-                texts = small.Replace("Student Image", " ").Replace("\r\n", " ").Trim().Replace("  ", ",").Split(',').ToList();
-              var  textss = small.Replace("Student Image", " ").Replace("\r\n", " ").Trim().Replace("  ", ",").Split(',').ToList();
-                texts.RemoveAt(texts.Count - 1);
+            var textses = small.Replace("Student Image", " ").Replace("\r\n", ",").Trim().Split(',').ToList();
+            texts = small.Replace("Student Image", " ").Replace("\r\n", " ").Trim().Replace("  ", ",").Split(',').ToList();
+            var textss = small.Replace("Student Image", " ").Replace("\r\n", " ").Trim().Replace("  ", ",").Split(',').ToList();
+            texts.RemoveAt(texts.Count - 1);
             foreach (var item in textss)
             {
                 if (item.Contains("NCA/"))
                 {
                     names.Add(item);
-                }              
+                }
             }
 
             List<XObjectImage> images = page.GetImages().Cast<XObjectImage>().ToList();
-         
+
             if (page.Number == 1 && images.Count != texts.Count)
             {
                 images.RemoveAt(0);
@@ -111,10 +102,10 @@ try
             }
             else
             {
-               
+
                 foreach (XObjectImage item in images)
                 {
-                    
+
                     byte[] imageRawBytes = item.RawBytes.ToArray();
                     using (FileStream stream = new FileStream($"{targetFolderPath}\\{img}.jpg", FileMode.Create, FileAccess.Write))
                     using (BinaryWriter writer = new BinaryWriter(stream))
@@ -122,20 +113,20 @@ try
                         writer.Write(imageRawBytes);
                         writer.Flush();
                     }
-                  
+
                     img++;
                 }
-                
+
                 omittedPages.Add("Page: " + page.Number.ToString());
-                
+
             }
 
         }
 
         File.WriteAllLines(targetFolderPath1, regNum);
-        File.WriteAllLines(targetFolderPath2,omittedPages);
+        File.WriteAllLines(targetFolderPath2, omittedPages);
         File.WriteAllLines(targetFolderPath3, names);
-      
+
         Console.WriteLine($"{regNum.Count} File written successfully!!!");
         Console.WriteLine($"{regNum.Count} Picture exported Successfully !!!");
         Console.WriteLine($"{omittedPages.Count} pages were skip due to irregularities!!!");
