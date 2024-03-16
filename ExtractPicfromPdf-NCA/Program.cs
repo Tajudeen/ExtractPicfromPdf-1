@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using System;
+using System.IO;
 using System.Collections.Immutable;
 using UglyToad.PdfPig;
 using UglyToad.PdfPig.Content;
@@ -9,11 +10,20 @@ using UglyToad.PdfPig.XObjects;
 using static System.Net.Mime.MediaTypeNames;
 using static UglyToad.PdfPig.Core.PdfSubpath;
 
-string pdfFilePath =    $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\target\\2024-stu\\pictures\\test.pdf";
-string targetFolderPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\target\\2024-stu\\pictures";
-string targetFolderPath1 = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\target\\2024-stu\\pictures\\student.csv";
-string targetFolderPath2 = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\target\\2024-stu\\pictures\\OmittedPages.csv";
-string targetFolderPath3 = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\target\\2024-stu\\pictures\\Name.csv";
+// string pdfFilePath =    $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\target\\2024-stu\\pictures\\test.pdf";
+// string targetFolderPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\target\\2024-stu\\pictures";
+// string targetFolderPath1 = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\target\\2024-stu\\pictures\\student.csv";
+// string targetFolderPath2 = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\target\\2024-stu\\pictures\\OmittedPages.csv";
+// string targetFolderPath3 = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\target\\2024-stu\\pictures\\Name.csv";
+
+//Avoid repetitive folder path
+var targetFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),"target","2024-stu","pictures");
+var  pdfFilePath = Path.Combine(targetFolderPath,"test.pdf");
+var targetFolderPath1 = Path.Combine(targetFolderPath,"students.csv");
+var targetFolderPath2 = Path.Combine(targetFolderPath,"OmittedPages.csv");
+var targetFolderPath3 = Path.Combine(targetFolderPath,"Name.csv");
+
+
 
 //  rename the file name for proper recognation
 string targetFolderPath4 = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\2024-stu\\Name-Extrated-from-pdf.csv";
@@ -47,7 +57,7 @@ try
         List<string> texts = new List<string>();
         List<string> regNum = new List<string>();
         List<string> names = new List<string>();
-     
+
         var imag = "";
         var img = 0;
         // int imageCount = 50715
@@ -65,8 +75,7 @@ try
                 if (item.Contains("NCA/"))
                 {
                     names.Add(item);
-                }
-               
+                }              
             }
 
             List<XObjectImage> images = page.GetImages().Cast<XObjectImage>().ToList();
@@ -137,8 +146,6 @@ catch (Exception e)
 {
     var message = e.Message;
     Console.WriteLine(message);
-
-
 }
 
 
